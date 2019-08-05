@@ -8,9 +8,26 @@ export default class App extends Component {
     super(props);
     this.state = {
       term: '',
-      items: []
+      items: [],
+      id: '',
+      finished: false
     };
   }
+
+  toggleItem = id => {
+    this.setState({
+      items: this.state.items.map(item => {
+        if (item.id === id) {
+          return {
+            ...item,
+            finished: !item.finished
+          };
+        } else {
+          return item;
+        }
+      })
+    });
+  };
 
   onChange = (event) => {
     this.setState({ term: event.target.value });
@@ -20,14 +37,21 @@ export default class App extends Component {
     event.preventDefault();
     this.setState({
       term: '',
+      id: Date.now(),
       items: [...this.state.items, this.state.term]
     });
   }
 
+  clearFinished = () => {
+    this.setState({
+      items: this.state.items.filter(item => !item.finished)
+    });
+  };
+
   render() {
     return (
       <div>
-        <TodoList items={this.state.items} />
+        <TodoList items={this.state.items} toggleItem={this.toggleItem} />
         <TodoForm 
           onSubmit={this.onSubmit}
           value={this.state.term}
