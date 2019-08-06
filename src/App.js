@@ -20,14 +20,13 @@ export default class App extends Component {
         if (item.id === id) {
           return {
             ...item,
-            finished: !item.finished
           };
         } else {
           return item;
         }
       })
-    });
-  };
+    })
+  }
 
   onChange = (event) => {
     this.setState({ term: event.target.value });
@@ -51,7 +50,7 @@ export default class App extends Component {
   render() {
     return (
       <div>
-        <TodoList items={this.state.items} toggleItem={this.toggleItem} />
+        <TodoList items={this.state.items} />
         <TodoForm 
           onSubmit={this.onSubmit}
           value={this.state.term}
