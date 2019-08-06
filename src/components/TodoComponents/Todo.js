@@ -1,15 +1,20 @@
 import React from 'react';
+import './Todo.css';
 
-const Todo = props => {
-    console.log(props.item.finished);
-    return (
-        <div
-            className={`item${props.item.finished ? ' purchased' : ''}`}
-            onClick={() => props.toggleItem(props.item.id)}
-        >
-            <p>{props.item.name}</p>
-        </div>
-    );
-};
+class Todo extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        console.log(this.props.todo);
+        return (
+            <div
+                onClick={() => this.props.toggleCompleted(this.props.todo.id)}
+                className={this.props.todo.completed ? "completed" : ""}>
+                {this.props.todo.task}
+            </div>
+        );
+    }
+}
 
 export default Todo;

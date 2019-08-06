@@ -3,59 +3,64 @@ import React, { Component } from 'react';
 import TodoForm from './components/TodoComponents/TodoForm';
 import TodoList from './components/TodoComponents/TodoList';
 
+const TodoData = [
+  {
+    task: 'Organize Garage',
+    id: 1528817077286,
+    completed: false
+  },
+  {
+    task: 'Bake cookies',
+    id: 1528817084358,
+    completed: true
+  }
+]
+
 export default class App extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
-      term: '',
-      items: [],
-      id: '',
-      finished: false
+      todos: TodoData,
     };
   }
 
-  toggleItem = id => {
+  filterCompleted = () => {
     this.setState({
-      items: this.state.items.map(item => {
-        if (item.id === id) {
-          return {
-            ...item,
-          };
-        } else {
-          return item;
-        }
+      todos: this.state.todos.filter(todo => {
+        return !todo.completed;
       })
-    })
-  }
-
-  onChange = (event) => {
-    this.setState({ term: event.target.value });
-  }
-
-  onSubmit = (event) => {
-    event.preventDefault();
-    this.setState({
-      term: '',
-      id: Date.now(),
-      items: [...this.state.items, this.state.term]
     });
   }
 
-  clearFinished = () => {
+  toggleCompleted = (id) => {
+    console.log('toggleCompleted', id);
     this.setState({
-      items: this.state.items.filter(item => !item.finished)
+      todos: this.state.todos.map(todo => {
+        if (id === todo.id) {
+          return { ...todo, completed: !todo.completed };
+        } else {
+          return todo;
+        }
+      })
+    });
+  }
+
+  addTodo = task => {
+    this.setState({
+      todos: [...this.state.todos, {
+        task: task,
+        id: Date.now(),
+        completed: false
+      }]
     });
   };
 
   render() {
     return (
       <div>
-        <TodoList items={this.state.items} />
-        <TodoForm 
-          onSubmit={this.onSubmit}
-          value={this.state.term}
-          onChange={this.onChange}
-        />
+          Todo List
+          <TodoList todos={this.state.todos} toggleCompleted={this.toggleCompleted} />
+          <TodoForm addTodo={this.addTodo} filterTodos={this.filterCompleted} />
       </div>
     );
   }
